@@ -25,7 +25,13 @@ function ExpenseForm(props) {
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    const expenseData = userInput;
+
+    const expenseData = {
+      id: userInput.id,
+      title: userInput.enteredTitle,
+      amount: userInput.enteredAmount,
+      date: new Date(userInput.enteredDate),
+    };
 
     props.onSaveExpenseData(expenseData);
     //onSaveExpenseData가 함수기 때문에 받아온 props를 함수로 실행할 수 있다.
