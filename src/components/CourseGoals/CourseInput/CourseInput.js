@@ -1,35 +1,7 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 
 import Button from "../../UI/Button/Button";
-import "./CourseInput.css";
-
-const FormControl = styled.div`
-  margin: 0.5rem 0;
-
-  & label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 0.5rem;
-    color: ${(props) => (props.isValid ? "red" : "black")};
-  }
-
-  & input {
-    display: block;
-    width: 100%;
-    border: 1px solid ${(props) => (props.isValid ? "red" : "#ccc")};
-    backgrond: ${(props) => (props.isValid ? "#ffd7d7" : "transparent")};
-    font: inherit;
-    line-height: 1.5rem;
-    padding: 0 0.25rem;
-  }
-
-  & input:focus {
-    outline: none;
-    background: #fad0ec;
-    border-color: #8b005d;
-  }
-`;
+import styles from "./CourseInput.module.css";
 
 const CourseInput = (props) => {
   const [enteredValue, setEnteredValue] = useState("");
@@ -47,18 +19,18 @@ const CourseInput = (props) => {
     if (enteredValue.trim().length === 0) {
       setIsValid(false);
       return;
-      //trim (많은)공백을 제거해주는 메소드
-      //공백을 제거한 후 값이 0이라면 return
     }
     props.onAddGoal(enteredValue);
   };
 
   return (
     <form onSubmit={formSubmitHandler}>
-      <FormControl isValid={!isValid}>
+      <div
+        className={`${styles["form-control"]} ${!isValid && styles.invalid}`}
+      >
         <label>Course Goal</label>
         <input type="text" onChange={goalInputChangeHandler} />
-      </FormControl>
+      </div>
       <Button type="submit">Add Goal</Button>
     </form>
   );
