@@ -7,18 +7,25 @@ import ErrorModal from "../UI/ErrorModal";
 function AddUser(props) {
   const [enteredUsername, setEnteredUsername] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
+  const [error, setError] = useState();
 
   const addUserHandler = (e) => {
     e.preventDefault();
 
     if (enteredAge.trim().length === 0 || enteredUsername.trim().length === 0) {
+      setError({
+        title: "Invalid input",
+        message:
+          "Please enter a valid name and age (non-empty values). 값을 입력해 주세요",
+      });
       return;
-      // 공백을 제거한 length의 값 === 0 이란 뜻.
     }
 
     if (+enteredAge < 1) {
-      // input으로 입력된 값은 전부 문자열로 처리되는데(바닐라 js에서)
-      //react에서는 오류가 생길 수 있기 때문에 +를 넣어 입력된 값을 숫자형으로 바꿈.
+      setError({
+        title: "Invalid age",
+        message: "Please enter a valid age. 0보다 큰 값을 입력해 주세요",
+      });
       return;
     }
     props.onAddUser(enteredUsername, enteredAge);
@@ -33,9 +40,19 @@ function AddUser(props) {
     setEnteredAge(e.target.value);
   };
 
+  const errorHandler = () => {
+    setError(null);
+  };
+
   return (
     <div>
-      <ErrorModal title="An error Occured!" message="Somthing went wrong!" />
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onHandleError={errorHandler}
+        />
+      )}
       <Card className={classes.input}>
         <form onSubmit={addUserHandler}>
           <label htmlFor="username">Username</label>
@@ -48,7 +65,6 @@ function AddUser(props) {
           <label htmlFor="age">Age (Year)</label>
           <input
             id="age"
-            min="1"
             value={enteredAge}
             type="number"
             onChange={ageChangeHandler}
